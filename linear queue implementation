@@ -1,141 +1,86 @@
+/*PRANAV_JAGADEESH_1BM18CS071*/
 
-#include <stdio.h>
-#include <conio.h>
-#include <malloc.h>
-#include <process.h>
-#include <ctype.h>
+#include<stdio.h>
+#include<conio.h>
+#include<stdlib.h>
+#include<process.h>
 
-struct linear_queue
+#define max 3
+int insertq ( int queue[max], int *rear , int *data)
 {
-    int info;
-    struct linear_queue *next;
-}*front,*rear,*newnode,*ptr;
-
-void menu();
-void display();
-int underflow();
-void enqueue(int);
-void dequeue();
-
-void main()
+      if ( *rear == max -1 )
+            return(-1);
+      else
+      {
+            *rear = *rear + 1;
+            queue[*rear] = *data;
+            return(1);
+      } 
+} 
+int delq( int queue[max], int *front, int *rear , int *data)
 {
-    clrscr();
-    menu();
-}
-
-void menu()
+      if ( *front == *rear)
+            return(-1);
+      else
+      {
+            (*front)++;
+            *data = queue[*front];
+            return(1);
+      } 
+} 
+int main()
 {
-    int choice,item;
-    printf("MENU");
-    printf("\n1. Insert into the queue");
-    printf("\n2. Delete from queue");
-    printf("\n3. Display");
-    printf("\n4. Exit");
-    printf("\nEnter your choice: ");
-    scanf("%d",&choice);
-    switch(choice)
-    {
-        case 1:
-            clrscr();
-            printf("\nEnter the item tobe inserted: ");
-            scanf("%d",&item);
-            enqueue(item);
-            clrscr();
-            printf("\nAfter inserting queue is:\n");
-            display();
-            getch();
-            clrscr();
-            menu();
-            break;
-        case 2:
-            clrscr();
-            if(underflow()==1)
+      int queue[max],data;
+      int front,rear,reply,option;
+      //... init queue
+      front = rear = -1;
+      printf("\tMenu");
+      printf("\n----------------------------");
+      printf("\n 1. Insert element in queue");
+      printf("\n 2. Delete element from queue");
+      printf("\n 3. print queue");
+      printf("\n 4. exit");
+      printf("\n----------------------------");
+      while(1)
+      {
+            printf("\nChoose operation : ");
+            scanf("%d",&option);
+            switch(option)
             {
-                dequeue();
-                if(underflow()==1)
-                {
-                    printf("\nAfter deletion queue is:\n");
-                    display();
-                }
+                  case 1 ://insert
+                        printf("\nEnter Number : ");
+                        scanf("%d",&data);
+                        reply = insertq(queue,&rear,&data);
+                        if ( reply == - 1)
+                        {
+                              printf("Queue is full");
+                              break;
+                        }
+                        else
+                        {
+						
+                              printf("%d is inserted in queue.\n",data);
+                              printf("Insertion Success!!!\n");
+                        }
+                        break;
+                  case 2 : //dele
+                        reply = delq(queue,&front,&rear,&data);
+                        if ( reply == -1 )
+                              printf("Queue is empty ");
+                        else
+                              printf("\nDeleted number is : %d\n", data);
+                              break;
+                        case 3 :
+                                while(front<rear)
+                               {  
+                                printf("%d\n",queue[front+1]);
+                               //*front += 1;
+                               front =front+1;
+                               }
+								break;
+                        case 4 : exit(0);
             }
-            getch();
-            clrscr();
-            menu();
-            break;
-        case 3:
-            clrscr();
-            if(underflow()==1)
-            {
-                printf("The queue is:\n");
-                display();
-            }
-            getch();
-            clrscr();
-            menu();
-            break;
-        case 4:
-            exit(1);
-        default:
-            clrscr();
-            printf("Your choice is wrong\n\n");
-            menu();
-    }
+      }
 }
 
-int underflow()
-{
-    if((front==NULL)&&(rear==NULL))
-    {
-        printf("\nQueue is empty");
-        return(0);
-    }
-    else
-    {
-        return(1);
-    }
-}
-
-void enqueue(int item)
-{
-    newnode=(struct linear_queue*)malloc(sizeof(struct linear_queue));
-    newnode->info=item;
-    if((front==NULL)&&(rear==NULL))
-    {
-        front=newnode;
-        rear=newnode;
-        newnode->next=NULL;
-    }
-    else
-    {
-        rear->next=newnode;
-        newnode->next=NULL;
-        rear=newnode;
-    }
-}
-
-void dequeue()
-{
-    if(front==rear)
-    {
-        front=NULL;
-        rear=NULL;
-    }
-    else
-    {
-        front=front->next;
-    }
-}
-
-void display()
-{
-    int i;
-    ptr=front;
-    i=1;
-    while(ptr!=NULL)
-    {
-        printf("\nQueue: %d",ptr->info);
-        ptr=ptr->next;
-        i++;
-    }
-}
 
