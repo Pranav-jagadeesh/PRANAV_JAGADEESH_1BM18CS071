@@ -1,0 +1,129 @@
+/*PRANAV_JAGADEESH_1BM18CS071*/
+
+#include <stdio.h>
+#include <process.h>
+#define MAX 3
+ 
+/*Declaration of circular queue.*/
+typedef struct
+{
+    int front   ;
+    int rear    ;
+    int count   ;
+    int ele[MAX]    ;
+}CirQueue;
+ 
+/*Initailization of circular queue.*/
+void initCirQueue(CirQueue * q)
+{
+    q->front =  0;
+    q->rear  = -1;
+    q->count =  0;
+}
+ 
+/*Check Queue is full or not*/
+int isFull(CirQueue * q)
+{
+    int full=0;
+     
+    if(q->count == MAX)
+        full = 1;   
+ 
+    return full;
+}
+ 
+/*Check Queue is empty or not*/
+int isEmpty(CirQueue * q)
+{
+    int empty=0;
+     
+    if(q->count == 0)
+        empty = 1;  
+ 
+    return empty;
+}
+ 
+/*To insert item into circular queue.*/
+void insertCirQueue(CirQueue * q, int item)
+{
+    if( isFull(q) )
+    {
+        printf("\nQueue Overflow");
+        return;
+    }
+     
+    q->rear = (q->rear+1)%MAX;
+    q->ele[q->rear] = item;
+     
+    q->count++;
+  
+    printf("\nInserted item : %d",item);
+}
+ 
+/*To delete item from queue.*/
+int deleteCirQueue(CirQueue * q)
+{
+    if( isEmpty(q) )
+    {
+        printf("\nQueue Underflow");
+        return -1;
+    }
+ 
+   
+    printf("\nDeleted item is : %d",q->ele[q->front]);
+    q->front = (q->front+1)%MAX;
+     
+    q->count--;
+ 
+    return q->ele[q->front];
+}
+
+void display(CirQueue * q)
+{
+    int i;
+    if(isEmpty(q)) printf(" \n Empty Queue\n");
+    else
+    {
+        printf("\n Front -> %d ",q->front);
+        printf("\n Items -> ");
+        for( i =q-> front; i!=q->rear; i=(i+1)%MAX) {
+            printf("%d ",q->ele[i]);
+        }
+        printf("%d ",q->ele[i]);
+        printf("\n Rear -> %d \n",q->rear);
+    }
+}
+ 
+int main()
+{
+    int ch,item=0;
+    CirQueue q;
+ 
+    initCirQueue(&q);
+    printf("\nCircular Queue operations\n");
+    printf("1.insert\n2.delete\n3.display\n4.exit\n");
+    while(1)
+    {
+        printf("\nEnter your choice:");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+        case 1: 
+            printf("Enter element to be insert:");
+            scanf("%d",&item);
+            insertCirQueue(&q,item);
+            break;
+        case 2: deleteCirQueue(&q);
+            break;
+        case 3:display(&q);
+            break;
+        case 4:exit(0);
+        default:printf("Invalid option\n");
+        }
+    }
+    
+   
+    printf("\n");
+    return 0;   
+}
+
