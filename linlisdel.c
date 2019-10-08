@@ -1,122 +1,33 @@
 #include<stdio.h>
 #include<stdlib.h>
-struct node
+struct node {
+    int data;          // Data
+    struct node *next; // Address 
+}*head;
+
+void createList(int n);
+void deleteFromFront();
+void deleteFromMiddle(int position);
+void deleteFromEnd();
+void displayList();
+
+int main()
 {
-  int data;
-  struct node *next;
-}*stnode;
+    int n, choice,position;
 
- void display(struct node* head)
- {
-      struct node *temp = head;
-      while(temp != NULL)
-      {
-       printf("%d --->",temp->data);
-       temp = temp->next;
-      }
- }
-
- void deleteFromFront(struct node* head)
- {
-    printf("\nList after deleting from front\n");
-    struct node* temp =  head;
-    temp = temp->next;
-    //*headRef = head;
-    free(head);
- }
-
- void deleteFromEnd(struct node* head)
- {
-    printf("\nList after deleting from end\n");
-    struct node* temp = head;
-    struct node* prev = NULL;
-    while(temp->next!=NULL)
-    {
-	prev=temp;
-     temp = temp->next;
-    }
-    prev->next = NULL;
-    free(temp);
- }
-
- void deleteFromMiddle(struct node* head, int position)
- {
-    printf("\nList after deleting from specified location\n");
-    struct node* temp = head;
-    int i;
-    for(i=2; i< position; i++)
-    {
-     if(temp->next!=NULL)
-     {
-        temp = temp->next;
-     }
-    }
-  temp->next = temp->next->next;
-  free(temp);
- }
-
- void createNodeList(int n)
- {
-    struct node *fnNode, *tmp;
-    int num, i;
-    stnode = (struct node *)malloc(sizeof(struct node));
-
-    if(stnode == NULL) //check whether the fnnode is NULL and if so no memory allocation
-    {
-        printf(" Memory can not be allocated.");
-    }
-    else
-    {
-     // reads data for the node through keyboard
-
-        printf(" Input data for node 1 : ");
-        scanf("%d", &num);
-        stnode->data = num;      
-        stnode->next = NULL; // links the address field to NULL
-        tmp = stnode;
-     // Creating n nodes and adding to linked list
-        for(i=2; i<=n; i++)
-        {
-            fnNode = (struct node *)malloc(sizeof(struct node));
-            if(fnNode == NULL)
-            {
-                printf(" Memory can not be allocated.");
-                break;
-            }
-            else
-            {
-                printf(" Input data for node %d : ", i);
-                scanf(" %d", &num);
- 
-                fnNode->data = num;      // links the num field of fnNode with num
-                fnNode->next = NULL; // links the address field of fnNode with NULL
- 
-                tmp->next = fnNode; // links previous node i.e. tmp to the fnNode
-                tmp = tmp->next; 
-            }
-        }
-    }
- }
-
-
-
-
- int main()
- {
-  int choice;
-  int position;
-  int n;
-		printf("\n\n Linked List : To create and display Singly Linked List :\n");
-		printf("-------------------------------------------------------------\n");
-		
+    /*
+     * Create a singly linked list of n nodes
+     */
+     
+    printf("\n\n Linked List : To create and display Singly Linked List :\n");
+	printf("-------------------------------------------------------------\n");
     printf(" Input the num of nodes you want to create : ");
     scanf("%d", &n);
-    createNodeList(n);
-    struct node *head;
-  head = stnode; //Save address of first node in head
-  printf("\nIntial list\n");
-  display(head); 
-  while(1)
+    createList(n);
+    printf("\nIntial list \n");
+    displayList();
+    
+    while(1)
   {
 	printf("\n\n 1. Delete at front\n 2. Delete at given position\n 3. Delete at end \n 4. Display\n 5.Exit");
 	printf("\n\nenter your choice\n");
@@ -125,27 +36,31 @@ struct node
 	{
 		case 1:
 		{
-			deleteFromFront(head);
-			display(head); 
+			 /* Delete first node from list */
+            deleteFromFront();
+			displayList(); 
 			break;
 		}
 		case 2:
 		{
 			printf("\nEnter the position to delete element\n");
 			scanf("%d",&position);
-			deleteFromMiddle(head, position);
-			display(head);
+			 /* Delete middle node from list */
+            deleteFromMiddle(position);
+            displayList(); 
 			break;
 		}
 		case 3:
 		{
-			deleteFromEnd(head);
-			display(head);
+			/* Delete last node from list */
+            deleteFromEnd();
+            displayList(); 
 			break;
- 		}
+		}
 		case 4:
 		{
-			display(head); 
+			printf("\nData in the list \n");
+            displayList(); 
 			break;
 		}
 		case 5:
@@ -159,4 +74,204 @@ struct node
 		}		
 	}
   }
- } 
+
+    return 0;
+}
+
+/*
+ * Create a list of n nodes
+ */
+void createList(int n)
+{
+    struct node *newNode, *temp;
+    int data, i;
+
+    head = (struct node *)malloc(sizeof(struct node));
+
+    /*
+     * If unable to allocate memory for head node
+     */
+    if(head == NULL)
+    {
+        printf("Unable to allocate memory.");
+    }
+    else
+    {
+        /*
+         * Input data of node from the user
+         */
+        printf("Enter the data of node 1: ");
+        scanf("%d", &data);
+
+        head->data = data; // Link the data field with data
+        head->next = NULL; // Link the address field to NULL
+
+        temp = head;
+
+        /*
+         * Create n nodes and adds to linked list
+         */
+        for(i=2; i<=n; i++)
+        {
+            newNode = (struct node *)malloc(sizeof(struct node));
+
+            /* If memory is not allocated for newNode */
+            if(newNode == NULL)
+            {
+                printf("Unable to allocate memory.");
+                break;
+            }
+            else
+            {
+                printf("Enter the data of node %d: ", i);
+                scanf("%d", &data);
+
+                newNode->data = data; // Link the data field of newNode with data
+                newNode->next = NULL; // Link the address field of newNode with NULL
+
+                temp->next = newNode; // Link previous node i.e. temp to the newNode
+                temp = temp->next;
+            }
+        }
+
+        printf("SINGLY LINKED LIST CREATED SUCCESSFULLY\n");
+    }
+}
+
+/*
+ * Deletes the first node of the linked list
+ */
+void deleteFromFront()
+{
+    struct node *toDelete;
+
+    if(head == NULL)
+    {
+        printf("List is already empty.");
+    }
+    else
+    {
+        toDelete = head;
+        head = head->next;
+
+        printf("\nData deleted = %d\n", toDelete->data);
+
+        /* Clears the memory occupied by first node*/
+        free(toDelete);
+
+        printf("SUCCESSFULLY DELETED FIRST NODE FROM LIST\n");
+    }
+}
+
+/*
+ * Delete middle node of the linked list
+ */
+void deleteFromMiddle(int position)
+{
+    int i;
+    struct node *toDelete, *prevNode;
+
+    if(head == NULL)
+    {
+        printf("List is already empty.");
+    }
+    else
+    {
+        toDelete = head;
+        prevNode = head;
+
+        for(i=2; i<=position; i++)
+        {
+            prevNode = toDelete;
+            toDelete = toDelete->next;
+
+            if(toDelete == NULL)
+                break;
+        }
+
+        if(toDelete != NULL)
+        {
+            if(toDelete == head)
+                head = head->next;
+
+            prevNode->next = toDelete->next;
+            toDelete->next = NULL;
+
+            /* Delete nth node */
+            free(toDelete);
+
+            printf("SUCCESSFULLY DELETED NODE FROM MIDDLE OF LIST\n");
+        }
+        else
+        {
+            printf("Invalid position unable to delete.");
+        }
+    }
+}
+
+
+/*
+ * Delete last node of the linked list
+ */
+void deleteFromEnd()
+{
+    struct node *toDelete, *secondLastNode;
+
+    if(head == NULL)
+    {
+        printf("List is already empty.");
+    }
+    else
+    {
+        toDelete = head;
+        secondLastNode = head;
+
+        /* Traverse to the last node of the list */
+        while(toDelete->next != NULL)
+        {
+            secondLastNode = toDelete;
+            toDelete = toDelete->next;
+        }
+
+        if(toDelete == head)
+        {
+            head = NULL;
+        }
+        else
+        {
+            /* Disconnect link of second last node with last node */
+            secondLastNode->next = NULL;
+        }
+
+        /* Delete the last node */
+        free(toDelete);
+
+        printf("SUCCESSFULLY DELETED LAST NODE OF LIST\n");
+    }
+}
+
+
+/*
+ * Display entire list
+ */
+void displayList()
+{
+    struct node *temp;
+
+    /*
+     * If the list is empty i.e. head = NULL
+     */
+    if(head == NULL)
+    {
+        printf("List is empty.");
+    }
+    else
+    {
+        temp = head;
+        while(temp != NULL)
+        {
+            printf("%d --->",temp->data); // Print the data of current node
+            temp = temp->next;                // Move to next node
+        }
+    }
+}
