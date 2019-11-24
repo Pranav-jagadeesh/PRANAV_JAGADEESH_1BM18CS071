@@ -1,4 +1,7 @@
-// A complete working C program to demonstrate all insertion and deletion methods on Linked List 
+
+//PRANAV_JAGADEESH_1BM18CS071
+
+// A complete working C program to demonstrate stack and queue implementation using linked List 
 #include <stdio.h> 
 #include <stdlib.h> 
 
